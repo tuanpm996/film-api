@@ -9,7 +9,6 @@ Film API
 
 ```bash
 pip install flask
-pip install flask-restful
 ```
 
 ## How to run
@@ -17,11 +16,16 @@ pip install flask-restful
 To run the project, run the following command in Git Bash.
 
 ```bash
-export FLASK_APP=api.py
+export FLASK_APP=index.py
 flask run
+```
+
+Or run:
+
+```bash
+bash init.sh
 ```
 
 ## API
 
 > - [localhost:5000/films]()
-> - [localhost:5000/login]()
