@@ -4,4 +4,4 @@ df = pd.read_csv("D://Python//foo.csv", sep="|",usecols=[0,1,2,4,24], names=['id
 # df.columns = ['id', 'name', 'date', '','link','','','','','','','','','','','','','','','','','','','', 'image_url']
 # print(type(df.loc[:,'id':'date'].to_json))
 def index():
-  return df
+    return df
