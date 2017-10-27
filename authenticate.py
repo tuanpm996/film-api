@@ -2,6 +2,7 @@ from functools import wraps
 from flask import request, Response
 import store
 
+
 def check_auth(username, password):
     auths = store.get_users()
     return auths.loc[df['username'] == username and df['password'] == password]
@@ -22,3 +23,15 @@ def require_auth(f):
             return auth_failed()
         return f(*arg, **kwargs)
     return decorated
+
+
+
+
+def sign_up(username, password):
+    # Try to find username in store.
+    if username not found:
+        store.add_user(username, password)
+
+    # If username has already exist return failed.
+
+    # Else save username and password into the store.

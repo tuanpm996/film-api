@@ -1,10 +1,11 @@
 import pandas as pd
 
-
-auth_cache = null
+auth_cache = None
 
 def get_users():
-    if auth_cache == null:
+    global auth_cache
+
+    if auth_cache is None:
         # Load username and password from CSV file.
         df = pd.read_csv(
             ".//auth.csv",
@@ -15,6 +16,22 @@ def get_users():
         auth_cache = df     # Cache username and password.
     return df
 
+def add_user(username, password):
+    global auth_cache
+
+    # Reference safe guard.
+    if auth_cache is None:
+        auth_cache = pd.DataFrame(columns=['username', 'password'])
+    
+    # Append item to cache.
+    auth_cache = auth_cache.append(pd.DataFrame(
+        data=[[username, password]],
+        columns=['username', 'password']
+        ))
+
+    # Save to file
+    auth_cache.to_csv('.//auth.csv')
+    return
 
 def get_films():
     df = pd.read_csv(
@@ -23,4 +40,5 @@ def get_films():
         usecols=[0, 1, 2, 4, 24],
         names=['id', 'name', 'date', 'link', 'image_url']
         )
+    
     return df.to_json()
