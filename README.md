@@ -1,10 +1,25 @@
 Film API
 ========
 
-## Installation:
+## Prerequisite
 
-> - [Flask Restful](https://flask-restful.readthedocs.io/en/latest/installation.html)
-> - [Flask](http://flask.pocoo.org/)
+> - Python (version > 3.0)
+
+## Installation
+
+```bash
+pip install flask
+pip install flask-restful
+```
+
+## How to run
+
+To run the project, run the following command in Git Bash.
+
+```bash
+export FLASK_APP=api.py
+flask run
+```
 
 ## API
 
