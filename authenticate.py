@@ -4,8 +4,6 @@ import storefrom flask import Flask, g, session
 from flask.ext.openid import OpenID
 from flask.ext.openid import OpenID
 
-oid = OpenID(app, './/auth_store', safe_roots=[])
-
 
 def check_auth(username, password):
     auths = store.get_users()

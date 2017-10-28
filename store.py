@@ -21,6 +21,10 @@ def exists_user(username):
         return true
     return false
 
+
+def df_height(df):
+    return df.shape[0]
+
 def add_user(username, password):
     global auth_cache
 
@@ -32,11 +36,13 @@ def add_user(username, password):
     auth_cache = auth_cache.append(pd.DataFrame(
         data=[[username, password]],
         columns=['username', 'password']
+        index=[df_height(auth_cache)] # Increase the label by 1.
         ))
 
     # Save to file
     auth_cache.to_csv('.//auth.csv')
     return
+
 
 def get_films():
     df = pd.read_csv(
