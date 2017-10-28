@@ -1,6 +1,10 @@
 from functools import wraps
 from flask import request, Response
-import store
+import storefrom flask import Flask, g, session
+from flask.ext.openid import OpenID
+from flask.ext.openid import OpenID
+
+oid = OpenID(app, './/auth_store', safe_roots=[])
 
 
 def check_auth(username, password):
@@ -26,12 +30,13 @@ def require_auth(f):
 
 
 
-
 def sign_up(username, password):
     # Try to find username in store.
     if username not found:
         store.add_user(username, password)
 
     # If username has already exist return failed.
+    if store.exists_user:
+        return false
 
     # Else save username and password into the store.

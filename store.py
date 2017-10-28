@@ -16,6 +16,11 @@ def get_users():
         auth_cache = df     # Cache username and password.
     return df
 
+def exists_user(username):
+    if auth_cache.loc[auth_cache['username'] == username].shape[0] > 0:
+        return true
+    return false
+
 def add_user(username, password):
     global auth_cache
 
