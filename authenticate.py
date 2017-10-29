@@ -1,5 +1,6 @@
 from functools import wraps
-from flask import request, Response, Flask, g, session
+from flask import request, Response, Flask, g, session, redirect
+import json
 
 import store
 
@@ -21,7 +22,6 @@ def auth_failed():
         'You have to login with proper credentials', 401,
         {'WWW-Authenticate': 'Basic realm="Login Required"'})
 
-
 def sign_up(username, password, user_info):
     # Try to find username in store.
     if store.exists_user(username):
@@ -32,4 +32,4 @@ def sign_up(username, password, user_info):
     # Else save username and password into the store.
     store.add_user(username, password, user_info)
 
-    return redirect('http://localhost:4200/login')
+    return status_ok()

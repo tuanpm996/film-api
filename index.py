@@ -4,26 +4,26 @@ import json
 
 import store
 import authenticate as auth
+import response as res
 
 
 app = Flask(__name__)
 CORS(app)
 
-# @app.before_request
-# def lookup_current_user():
-    # g.user = None
-    # auth_token = request.headers['authorization']
+@app.before_request
+def lookup_current_user():
+    g.user = None
 
-    # console.log(auth_token)
+    if 'authorization' in request.headers:
+        auth_token = request.headers['authorization']
 
-    # if auth_token:
-    #     # Check for authenticate token.
-    #     # If token exists return user's information
-    #     data = json.load(auth_token)
-    #     g.user = auth.get_user(data.user_id)
+        if auth_token:
+            # Check for authenticate token.
+            # If token exists return user's information
+            data = json.load(auth_token)
+            g.user = auth.get_user(data.user_id)
 
-    # # Default user, unauthenticated user, is None.
-    # return
+    # Default user, unauthenticated user, is None.
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -31,14 +31,16 @@ def login():
     if g.user is not None:
         return redirect('http://localhost:4200')
 
+    data = request.get_json()
+
+    username = data['username']
+    password = data['password']
+
     user_id = auth.check_auth(username, password)
 
     if user_id >= 0:
         # Response authenticate token.
-        response = {}
-        response['user_id'] = user_id
-        response.headers['']
-        return json.dumps(response)
+        return res.status_ok({ user_id: user_id })
 
     # Else, return unauthenticated message.
     return auth.auth_failed()
@@ -58,7 +60,7 @@ def signup():
         age = data['age']
         gender = data['gender']
 
-        print(username)
+        print('{0} {1} {2} {3}'.format(username, password, age, gender))
 
         user_info = {}
         user_info['age'] = age

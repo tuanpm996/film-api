@@ -18,6 +18,13 @@ def get_users():
     return df
 
 def exists_user(username):
+    global auth_cache
+
+    # Reference safe guard.
+    if auth_cache is None:
+        auth_cache = pd.DataFrame(
+            columns=['username', 'password', 'age', 'gender'])
+
     return (auth_cache['username'].isin([username])).any()
 
 def df_height(df):
