@@ -1,29 +1,22 @@
 import pandas as pd
 
-auth_cache = None
+auth_cache = pd.read_csv(
+    './/auth.csv',
+    sep='|',
+    index_col=0,
+    usecols=[0, 1, 2, 3, 4],
+)
 
 def get_users():
     global auth_cache
-
-    if auth_cache is None:
-        # Load username and password from CSV file.
-        df = pd.read_csv(
-            './/auth.csv',
-            sep='|',
-            index_col=0,
-            usecols=[1, 2, 3, 4],
-            names=['username', 'password', 'age', 'gender']
-        )
-        auth_cache = df     # Cache username and password.
-    return df
+    
+    return auth_cache
 
 def exists_user(username):
     global auth_cache
 
-    # Reference safe guard.
-    if auth_cache is None:
-        auth_cache = pd.DataFrame(
-            columns=['username', 'password', 'age', 'gender'])
+    print(username)
+    print(auth_cache)
 
     return (auth_cache['username'].isin([username])).any()
 
@@ -36,19 +29,15 @@ def add_user(username, password, user_info):
     age = user_info['age']
     gender = user_info['gender']
 
-    # Reference safe guard.
-    if auth_cache is None:
-        auth_cache = pd.DataFrame(columns=['username', 'password', 'age', 'gender'])
-    
     # Append item to cache.
     auth_cache = auth_cache.append(pd.DataFrame(
         data=[[username, password, age, gender]],
         columns=['username', 'password', 'age', 'gender'],
-        index=[df_height(auth_cache)] # Increase the label by 1.
+        index=[df_height(auth_cache) + 1] # Increase the label by 1.
         ))
 
     # Save to file
-    auth_cache.to_csv('.//auth.csv', sep='|')
+    auth_cache.to_csv('.//auth.csv', sep='|', encoding='utf-8')
     return
 
 def get_user(user_id):

@@ -1,5 +1,6 @@
-from flask import Flask, g, session, request
+from flask import Flask, g, session, request, redirect
 from flask_cors import CORS 
+import numpy as np
 import json
 
 import store
@@ -20,8 +21,8 @@ def lookup_current_user():
         if auth_token:
             # Check for authenticate token.
             # If token exists return user's information
-            data = json.load(auth_token)
-            g.user = auth.get_user(data.user_id)
+            print(auth_token[0])
+            g.user = store.get_user(auth_token[0])
 
     # Default user, unauthenticated user, is None.
 
@@ -40,7 +41,7 @@ def login():
 
     if user_id >= 0:
         # Response authenticate token.
-        return res.status_ok({ user_id: user_id })
+        return res.status_ok({ 'user_id': str(user_id) })
 
     # Else, return unauthenticated message.
     return auth.auth_failed()
