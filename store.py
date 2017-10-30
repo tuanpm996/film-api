@@ -15,9 +15,6 @@ def get_users():
 def exists_user(username):
     global auth_cache
 
-    print(username)
-    print(auth_cache)
-
     return (auth_cache['username'].isin([username])).any()
 
 def df_height(df):
@@ -42,15 +39,14 @@ def add_user(username, password, user_info):
 
 def get_user(user_id):
     global auth_cache
+    has_id = auth_cache.index.isin([user_id])   # Vector contains boolean values.
 
-    if user_id in auth_cache.index:
-        result = auth_cache.loc[0]
+    if has_id.any():
+        user_info = auth_cache.loc[has_id]
         
-        if df_height(result) > 1:
-            result.iloc[0].to_dict()
-            return None
+        print(user_info)
 
-        return auth_cache.loc[0].to_dict()
+        return user_info.iloc[0].to_dict()
     return None
 
 def get_films():
@@ -61,4 +57,4 @@ def get_films():
         names=['id', 'name', 'date', 'link', 'image_url']
         )
     
-    return df.to_json()
+    return df.loc[0:5].to_json()
