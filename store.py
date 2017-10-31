@@ -56,5 +56,5 @@ def get_films():
         usecols=[0, 1, 2, 4, 24],
         names=['id', 'name', 'date', 'link', 'image_url']
         )
-    
-    return df.loc[0:5].to_json()
+
+    return df.loc[0:7].to_json()
