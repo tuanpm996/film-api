@@ -1,7 +1,7 @@
 import pandas as pd
 
 auth_cache = pd.read_csv(
-    './/auth.csv',
+    'data/auth.csv',
     sep='|',
     index_col=0,
     usecols=[0, 1, 2, 3, 4],
@@ -34,7 +34,7 @@ def add_user(username, password, user_info):
         ))
 
     # Save to file
-    auth_cache.to_csv('.//auth.csv', sep='|', encoding='utf-8')
+    auth_cache.to_csv('data/auth.csv', sep='|', encoding='utf-8')
     return
 
 def get_user(user_id):
@@ -51,7 +51,7 @@ def get_user(user_id):
 
 def get_films():
     df = pd.read_csv(
-        ".//items.csv",
+        "data/items.csv",
         sep="|",
         usecols=[0, 1, 2, 4, 24],
         names=['id', 'name', 'date', 'link', 'image_url']
