@@ -83,12 +83,10 @@ def signup():
 
 @app.route('/films', methods=['GET', 'POST'])
 def get_films():
-    print(g.user)
     return store.get_films()
 
+@app.route('/film/<id>', methods=['GET', 'POST'])
+def get_film(id):
+    record = store.get_film_by_id(int(id))
 
-@app.route('/film/:id', methods=['GET', 'POST'])
-def get_film():
-    print(g.user)
-    id = request.args.get('id', type=int, default=None)
-    return store.get_film(id)
+    return json.dumps(record)

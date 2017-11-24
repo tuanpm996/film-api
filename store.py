@@ -51,10 +51,21 @@ def get_user(user_id):
 
 def get_films():
     df = pd.read_csv(
-        ".//items.csv",
+        './/items.csv',
         sep="|",
         usecols=[0, 1, 2, 4, 24],
         names=['id', 'name', 'date', 'link', 'image_url']
         )
 
-    return df.loc[0:7].to_json()
+    return df.loc[3:8].to_json(orient='records')
+
+
+def get_film_by_id(id):
+    df = pd.read_csv(
+        './/items.csv',
+        sep="|",
+        usecols=[0, 1, 2, 4, 24],
+        names=['id', 'name', 'date', 'link', 'image_url']
+    )
+
+    return df.loc[df['id'] == id].to_dict(orient='records')[0]
