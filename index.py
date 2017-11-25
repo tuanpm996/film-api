@@ -25,39 +25,16 @@ def lookup_current_user():
             decoded_token = base64.b64decode(auth_token).decode('UTF-8')
             print(decoded_token)
             data = {
-                "user_id": -1
+                'user_id': -1
             }
             try:
-                data = json.loads(decoded_token, encoding='UTF-8')
+                data['user_id'] = int(decoded_token)
             except json.JSONDecodeError as e:
                 print(e)
+
             g.user = store.get_user(data['user_id'])
             print(g.user)
     # Default user, unauthenticated user, is None.
-
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    # User already logged in.
-    if g.user is not None:
-        return redirect('http://localhost:4200')
-
-    data = request.get_json()
-
-    username = data['username']
-    password = data['password']
-
-    user_id = auth.check_auth(username, password)
-
-    if user_id >= 0:
-        # Response authenticate token.
-        return res.status_ok({
-            'user_id': str(user_id),
-            'username': username
-        })
-
-    # Else, return unauthenticated message.
-    return auth.auth_failed()
 
 
 @app.route('/signup', methods=['POST'])
@@ -83,10 +60,42 @@ def signup():
 
 @app.route('/films', methods=['GET', 'POST'])
 def get_films():
-    return store.get_films()
+    return store.get_films()  \
+        .loc[3:8]             \
+        .to_json(orient='records')
 
 @app.route('/film/<id>', methods=['GET', 'POST'])
 def get_film(id):
     record = store.get_film_by_id(int(id))
 
     return json.dumps(record)
+
+@app.route('/suggest', methods=['GET'])
+def suggest_empty():
+    films = store.get_films()
+
+    return films.loc[3:8] \
+        .to_json(orient='records')
+
+@app.route('/suggest/<raw_string>', methods=['GET'])
+def suggest(raw_string):
+    decoded_string = base64.b64decode(raw_string).decode('UTF-8')
+
+    films = store.get_films()
+
+    return films.loc[films['name'].str          \
+        .contains(decoded_string, na=False)]    \
+        .to_json(orient='records')
+
+
+@app.route('/search/<raw_string>', methods=['GET'])
+def search(raw_string):
+    decoded_string = base64.b64decode(raw_string).decode('UTF-8')
+
+    films = store.get_films()
+
+    return films.loc[
+            films['name'].str
+            .contains(decoded_string, na=False)
+        ]           \
+        .to_json(orient='records')
